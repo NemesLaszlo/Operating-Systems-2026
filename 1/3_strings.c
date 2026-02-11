@@ -43,5 +43,8 @@ int main()
   //important other functions: strcmp, strcat, strlen;
 
   free(str2); //felszabadítás
+  str2 = NULL;
+  // str1-et nem kell felszabadítani, mert nem dinamikusan foglalt memória,
+  // hanem automatikus (stack) változó, ami a függvény végén automatikusan felszabadul.
   return 0;
 }
