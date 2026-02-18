@@ -34,6 +34,18 @@ void use_open_bin(char *fname)
   SEEK_CUR	Offset is to be measured relative to the current location of the pointer.
   SEEK_END	Offset is to be measured relative to the end of the file.
   */
+  /*
+  lseek = LOW-LEVEL file positioning (system call)
+
+  - Works with file descriptors (int f) returned by open()
+  - Does NOT use buffering → directly moves the kernel file pointer
+  - Mainly used together with open(), read(), write()
+
+  NOTE:
+  lseek should NOT be mixed with fopen/fread/fwrite because
+  those use buffered I/O which can become inconsistent if the
+  file pointer is moved outside the stdio buffering system.
+*/
   read(f, &c, sizeof(c));
   printf("Current character - after positioning %c\n", c);
   close(f);
@@ -96,6 +108,22 @@ void use_fopen_bin(char *fname)
   }
   printf("\n");
   fseek(f, 0, SEEK_SET); // fájl elejére ugrás
+  /*
+  fseek = HIGH-LEVEL file positioning (C standard library)
+
+  - Works with FILE* streams returned by fopen()
+  - Uses buffered I/O → stdio keeps an internal buffer for performance
+  - Keeps the buffer and file pointer synchronized
+  - Should be used with fread(), fwrite(), fgets(), etc.
+
+  Compared to lseek:
+    fseek handles buffering safely
+    lseek works directly on the OS file descriptor
+
+  Rule of thumb:
+    open()  → use lseek()
+    fopen() → use fseek()
+*/
   fread(&c, sizeof(c), sizeof(c), f);
   printf("First character - after positioning %c\n", c);
 
