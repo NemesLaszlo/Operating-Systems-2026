@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>     // fork, getpid
+#include <unistd.h>     // fork
 #include <sys/wait.h>   // waitpid
 #include <errno.h>
 
@@ -19,13 +19,13 @@ pid_t child1()
 
     if (szal > 0)
     {
-        // Parent returns child PID
+        // Parent returns child's PID
         return szal;
     }
 
     // Child process
     notacommonvalue = 5;
-    printf("The value is %i in child1 process\n", notacommonvalue);
+    printf("The value is %i in child process\n", notacommonvalue);
     exit(0);
 }
 
@@ -41,7 +41,6 @@ pid_t child2()
 
     if (szal > 0)
     {
-        // Parent returns child PID
         return szal;
     }
 
@@ -60,7 +59,7 @@ int main()
 
     mainszalertek = getpid();
 
-    // Store child PIDs
+    // Store returned child PIDs
     pid_t child1_pid = child1();
     pid_t child2_pid = child2();
 
@@ -73,7 +72,7 @@ int main()
     {
         if (WIFEXITED(status))
         {
-            printf("Child1 terminated normally with exit status: %d\n",
+            printf("Child1 terminated with exit status: %d\n",
                    WEXITSTATUS(status));
         }
         else
@@ -91,7 +90,7 @@ int main()
     {
         if (WIFEXITED(status))
         {
-            printf("Child2 terminated normally with exit status: %d\n",
+            printf("Child2 terminated with exit status: %d\n",
                    WEXITSTATUS(status));
         }
         else
@@ -100,7 +99,7 @@ int main()
         }
     }
 
-    printf("The value is %i in parent process (remains the original)\n",
+    printf("The value is %i in parent process (remain the original)\n",
            notacommonvalue);
 
     return 0;
