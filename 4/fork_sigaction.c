@@ -49,9 +49,6 @@ int main() {
     sa.sa_flags = 0; //  No special flags are used.
     sigaction(SIGUSR1, &sa, NULL); // Registers sa as the new signal handler for SIGUSR1.
 
-    pid_t c1 = child1();
-    pid_t c2 = child2();
-
     // Creates two signal sets:
     // - mask (which will contain SIGUSR1)
     // - oldmask (to store the previous signal mask)
@@ -65,6 +62,9 @@ int main() {
     sigprocmask(SIG_BLOCK, &mask, &oldmask); // Blocks SIGUSR1, so it cannot be delivered yet. Saves the old signal mask (the state before blocking SIGUSR1) in oldmask.
     // a folyamat mostantól blokkolja a SIGUSR1-et, minden érkezése pending lesz, a handler nem fut le.
 
+    pid_t c1 = child1();
+    pid_t c2 = child2();
+    
     // Temporarily unblocks SIGUSR1 and pauses execution until a signal arrives. -> When SIGUSR1 arrives from child1(), 
     // the process wakes up and executes signal_handler(), then resumes execution after sigsuspend().
     // First wait (for first child signal)
